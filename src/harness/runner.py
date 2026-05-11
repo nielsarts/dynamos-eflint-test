@@ -16,6 +16,7 @@ Each phase can be skipped via the ``RunOptions`` flags so the CLI can do
 """
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass, field
 from typing import Literal
 
@@ -57,6 +58,7 @@ class ScenarioResult:
     actual: ActualValidationResponse | None = None
     comparison: ComparisonResult | None = None
     error: str | None = None
+    sut_elapsed_s: float | None = None
 
     @property
     def ok(self) -> bool:
@@ -75,7 +77,8 @@ class ScenarioResult:
         if self.seed is not None:
             lines.append(dim(f"  seeded  {', '.join(self.seed.keys())}"))
         if self.actual is not None:
-            lines.append(dim(f"  sut     {self.actual.raw}"))
+            elapsed_str = f"  ({self.sut_elapsed_s * 1000:.1f} ms)" if self.sut_elapsed_s is not None else ""
+            lines.append(dim(f"  sut     {self.actual.raw}{elapsed_str}"))
         if self.comparison is not None:
             lines.append(self.comparison.render())
         if self.error is not None:
@@ -125,7 +128,9 @@ def run_scenario(
                     "set DYNAMOS_POLICY_ENFORCER_URL or pass --sut-url"
                 )
                 return result
+            _t0 = time.monotonic()
             result.actual = client.validate(manifest)
+            result.sut_elapsed_s = time.monotonic() - _t0
 
         result.comparison = compare(manifest, result.expected, result.actual)
         result.outcome = "pass" if result.comparison.ok else "fail"
