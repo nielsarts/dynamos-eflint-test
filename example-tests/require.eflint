@@ -1,0 +1,18 @@
+// REQUIRE.eflint
+//   by Lut99
+//
+// Created:
+//   26 Jun 2024, 17:19:52
+// Last edited:
+//   26 Jun 2024, 17:20:25
+// Auto updated?
+//   Yes
+//
+// Description:
+//   Tests compatability with the `#require`-directive.
+//
+
+#require "./amy.eflint".
+
+
+//#assert person(Amy).

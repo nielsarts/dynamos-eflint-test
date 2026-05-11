@@ -1,0 +1,28 @@
+// COMPOSITE.eflint
+//   by Lut99
+//
+// Created:
+//   27 Jun 2024, 13:45:54
+// Last edited:
+//   27 Jun 2024, 13:48:23
+// Auto updated?
+//   Yes
+//
+// Description:
+//   Tests some larger composites to parse.
+//
+
+
+Fact person Identified by String.
+Fact thing Identified by String.
+Fact year Identified by Int.
+
+Fact offer Identified by person * thing * year.
+
+Duty offer-must-be-cool
+    Holder person1
+    Claimant person2
+    Related to offer
+    Violated when False.
+
+//#violated not offer-must-be-cool(person(Amy), person(Bob), offer(person(Amy), thing(Vase), year(2024))).

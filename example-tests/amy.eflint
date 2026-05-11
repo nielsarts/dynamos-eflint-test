@@ -1,0 +1,19 @@
+// AMY.eflint
+//   by Lut99
+//
+// Created:
+//   24 Jun 2024, 11:29:38
+// Last edited:
+//   26 Jun 2024, 17:20:08
+// Auto updated?
+//   Yes
+//
+// Description:
+//   Example test file asserting if Amy is derived.
+//
+
+Fact person Identified by String.
+
++person(Amy).
+//#assert person(Amy).
+//#assert !person(Bob).
