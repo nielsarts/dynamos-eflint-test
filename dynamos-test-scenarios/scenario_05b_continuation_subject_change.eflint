@@ -13,7 +13,9 @@
 //                        scenario_05b_continuation_subject_change.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_VU.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BASELINE — Establish a session
@@ -24,16 +26,19 @@
 +requester(Niels).
 +requested-steward(VU).
 
-?Holds(permitted-request(Niels)).
-// Expected: true
+Invariant scenario_five_b_permitted_request_baseline
+  When permitted-request(Niels).
+//#violated !scenario_five_b_permitted_request_baseline.
 
 submit-data-request(Niels, VU).
 
-?Holds(data-request(Niels, VU)).
-// Expected: true
+Invariant scenario_five_b_data_request_baseline
+  When data-request(Niels, VU).
+//#violated !scenario_five_b_data_request_baseline.
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: true
+Invariant scenario_five_b_continuation_baseline
+  When permitted-continuation(Niels, VU, ComputeToData).
+//#violated !scenario_five_b_continuation_baseline.
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -41,12 +46,16 @@ submit-data-request(Niels, VU).
 // ═══════════════════════════════════════════════════════════════════════════
 
 -has-relation(Niels, VU).
+//#violated scenario_five_b_permitted_request_baseline.
+//#violated scenario_five_b_continuation_baseline.
 
-?Holds(permitted-at-steward(Niels, VU)).
-// Expected: false
+Invariant scenario_five_b_not_permitted_at_vu
+  When Not(permitted-at-steward(Niels, VU)).
+//#violated !scenario_five_b_not_permitted_at_vu.
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: false — session revoked
+Invariant scenario_five_b_no_continuation_after_relation_loss
+  When Not(permitted-continuation(Niels, VU, ComputeToData)).
+//#violated !scenario_five_b_no_continuation_after_relation_loss.
 
 // Restore.
 +has-relation(Niels, VU).
@@ -54,6 +63,8 @@ submit-data-request(Niels, VU).
 +relation-allows-dataset(Niels, VU, WageGap).
 +relation-allows-archetype(Niels, VU, ComputeToData).
 +relation-allows-compute-provider(Niels, VU, SURF).
+//#violated scenario_five_b_not_permitted_at_vu.
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: true
+Invariant scenario_five_b_continuation_restored
+  When permitted-continuation(Niels, VU, ComputeToData).
+//#violated !scenario_five_b_continuation_restored.

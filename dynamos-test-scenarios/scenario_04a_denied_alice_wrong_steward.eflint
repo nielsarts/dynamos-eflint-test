@@ -16,7 +16,10 @@
 //                        scenario_04a_denied_alice_wrong_steward.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_VU.eflint".
+#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -32,14 +35,18 @@
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
-?Holds(has-relation(Alice, VU)).
-// Expected: false
+Invariant scenario_four_a_no_relation_vu
+  When Not(has-relation(Alice, VU)).
+//#violated !scenario_four_a_no_relation_vu.
 
-?Holds(permitted-request(Alice)).
-// Expected: false
+Invariant scenario_four_a_not_permitted_request
+  When Not(permitted-request(Alice)).
+//#violated !scenario_four_a_not_permitted_request.
 
 // Adding UVA to the request makes it admissible:
 +requested-steward(UVA).
+//#violated scenario_four_a_not_permitted_request.
 
-?Holds(permitted-request(Alice)).
-// Expected: true
+Invariant scenario_four_a_permitted_request_after_uva
+  When permitted-request(Alice).
+//#violated !scenario_four_a_permitted_request_after_uva.

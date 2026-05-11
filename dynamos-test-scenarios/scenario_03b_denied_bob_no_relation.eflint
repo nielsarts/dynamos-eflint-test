@@ -15,7 +15,10 @@
 //                        scenario_03b_denied_bob_no_relation.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_VU.eflint".
+#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -31,11 +34,14 @@
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
-?Holds(has-relation(Bob, VU)).
-// Expected: false
+Invariant scenario_three_b_no_relation_vu
+  When Not(has-relation(Bob, VU)).
+//#violated !scenario_three_b_no_relation_vu.
 
-?Holds(has-relation(Bob, UVA)).
-// Expected: false
+Invariant scenario_three_b_no_relation_uva
+  When Not(has-relation(Bob, UVA)).
+//#violated !scenario_three_b_no_relation_uva.
 
-?Holds(permitted-request(Bob)).
-// Expected: false
+Invariant scenario_three_b_not_permitted_request
+  When Not(permitted-request(Bob)).
+//#violated !scenario_three_b_not_permitted_request.

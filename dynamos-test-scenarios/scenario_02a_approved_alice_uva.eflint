@@ -13,7 +13,9 @@
 //                        scenario_02a_approved_alice_uva.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -28,16 +30,28 @@
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
-?Holds(permitted-request(Alice)).
-// Expected: true
+Invariant scenario_two_a_permitted_request
+  When permitted-request(Alice).
+//#violated !scenario_two_a_permitted_request.
 
-?Holds(permitted-at-steward(Alice, UVA)).
-// Expected: true
+Invariant scenario_two_a_permitted_at_uva
+  When permitted-at-steward(Alice, UVA).
+//#violated !scenario_two_a_permitted_at_uva.
 
-?-archetype When valid-archetype(Alice, UVA, archetype).
-// Expected: DataThroughTtp
+Invariant scenario_two_a_uva_data_through_ttp
+  When valid-archetype(Alice, UVA, DataThroughTtp).
+//#violated !scenario_two_a_uva_data_through_ttp.
+
+Invariant scenario_two_a_uva_not_compute_to_data
+  When Not(valid-archetype(Alice, UVA, ComputeToData)).
+//#violated !scenario_two_a_uva_not_compute_to_data.
+
+Invariant scenario_two_a_uva_not_reproducable_science
+  When Not(valid-archetype(Alice, UVA, ReproducableScience)).
+//#violated !scenario_two_a_uva_not_reproducable_science.
 
 submit-data-request(Alice, UVA).
 
-?Holds(data-request(Alice, UVA)).
-// Expected: true
+Invariant scenario_two_a_data_request_uva
+  When data-request(Alice, UVA).
+//#violated !scenario_two_a_data_request_uva.

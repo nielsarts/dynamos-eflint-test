@@ -15,7 +15,9 @@
 //                        scenario_04b_denied_alice_restricted_archetype.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -31,14 +33,18 @@
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
-?Holds(permitted-at-steward(Alice, UVA)).
-// Expected: true
+Invariant scenario_four_b_permitted_at_uva
+  When permitted-at-steward(Alice, UVA).
+//#violated !scenario_four_b_permitted_at_uva.
 
-?Holds(valid-archetype(Alice, UVA, ComputeToData)).
-// Expected: false
+Invariant scenario_four_b_not_compute_to_data
+  When Not(valid-archetype(Alice, UVA, ComputeToData)).
+//#violated !scenario_four_b_not_compute_to_data.
 
-?Holds(valid-archetype(Alice, UVA, ReproducableScience)).
-// Expected: false
+Invariant scenario_four_b_not_reproducable_science
+  When Not(valid-archetype(Alice, UVA, ReproducableScience)).
+//#violated !scenario_four_b_not_reproducable_science.
 
-?-archetype When valid-archetype(Alice, UVA, archetype).
-// Expected: DataThroughTtp
+Invariant scenario_four_b_data_through_ttp
+  When valid-archetype(Alice, UVA, DataThroughTtp).
+//#violated !scenario_four_b_data_through_ttp.

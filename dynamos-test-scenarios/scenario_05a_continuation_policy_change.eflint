@@ -14,7 +14,9 @@
 //                        scenario_05a_continuation_policy_change.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_VU.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BASELINE — Establish a session
@@ -25,16 +27,19 @@
 +requester(Niels).
 +requested-steward(VU).
 
-?Holds(permitted-request(Niels)).
-// Expected: true
+Invariant scenario_five_a_permitted_request_baseline
+  When permitted-request(Niels).
+//#violated !scenario_five_a_permitted_request_baseline.
 
 submit-data-request(Niels, VU).
 
-?Holds(data-request(Niels, VU)).
-// Expected: true
+Invariant scenario_five_a_data_request_baseline
+  When data-request(Niels, VU).
+//#violated !scenario_five_a_data_request_baseline.
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: true
+Invariant scenario_five_a_continuation_baseline
+  When permitted-continuation(Niels, VU, ComputeToData).
+//#violated !scenario_five_a_continuation_baseline.
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -42,18 +47,27 @@ submit-data-request(Niels, VU).
 // ═══════════════════════════════════════════════════════════════════════════
 
 -steward-supports-archetype(VU, ComputeToData).
+//#violated scenario_five_a_continuation_baseline.
 
-?Holds(valid-archetype(Niels, VU, ComputeToData)).
-// Expected: false
+Invariant scenario_five_a_not_valid_archetype_after_withdrawal
+  When Not(valid-archetype(Niels, VU, ComputeToData)).
+//#violated !scenario_five_a_not_valid_archetype_after_withdrawal.
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: false — session revoked
+Invariant scenario_five_a_no_continuation_after_withdrawal
+  When Not(permitted-continuation(Niels, VU, ComputeToData)).
+//#violated !scenario_five_a_no_continuation_after_withdrawal.
 
-?-archetype When valid-archetype(Niels, VU, archetype).
-// Expected: (empty)
+Invariant scenario_five_a_no_compute_to_data
+  When Not(valid-archetype(Niels, VU, ComputeToData)).
+//#violated !scenario_five_a_no_compute_to_data.
+
+Invariant scenario_five_a_no_data_through_ttp
+  When Not(valid-archetype(Niels, VU, DataThroughTtp)).
+//#violated !scenario_five_a_no_data_through_ttp.
 
 // Restore.
 +steward-supports-archetype(VU, ComputeToData).
 
-?Holds(permitted-continuation(Niels, VU, ComputeToData)).
-// Expected: true
+Invariant scenario_five_a_continuation_restored
+  When permitted-continuation(Niels, VU, ComputeToData).
+//#violated !scenario_five_a_continuation_restored.

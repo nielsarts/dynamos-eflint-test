@@ -6,6 +6,7 @@
 //
 // Requires: 01_interface_policy.eflint + 02_agreement_rules.eflint
 // ─────────────────────────────────────────────────────────────────────────────
+#require "02_agreement_rules.eflint".
 
 // Layer 2b — Per-steward agreement for VU (agreement_VU.eflint)
 

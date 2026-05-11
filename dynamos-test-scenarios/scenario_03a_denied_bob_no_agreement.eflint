@@ -13,7 +13,8 @@
 //                        scenario_03a_denied_bob_no_agreement.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -30,11 +31,14 @@
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
-?Holds(agreement(SURF_org)).
-// Expected: false
+Invariant scenario_three_a_no_agreement
+  When Not(agreement(SURF_org)).
+//#violated !scenario_three_a_no_agreement.
 
-?Holds(permitted-at-steward(Bob, SURF_org)).
-// Expected: false
+Invariant scenario_three_a_not_permitted_at_steward
+  When Not(permitted-at-steward(Bob, SURF_org)).
+//#violated !scenario_three_a_not_permitted_at_steward.
 
-?Holds(permitted-request(Bob)).
-// Expected: false
+Invariant scenario_three_a_not_permitted_request
+  When Not(permitted-request(Bob)).
+//#violated !scenario_three_a_not_permitted_request.

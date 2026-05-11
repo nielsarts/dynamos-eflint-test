@@ -16,7 +16,9 @@
 //                        scenario_05c_continuation_object_change.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-
+#require "01_interface_policy.eflint".
+#require "02_agreement_rules.eflint".
+#require "agreement_VU.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BASELINE — Establish a session (hypothetical DataThroughTtp at VU)
@@ -27,22 +29,26 @@
 +requester(Niels).
 +requested-steward(VU).
 
-?Holds(permitted-request(Niels)).
-// Expected: true
+Invariant scenario_five_c_permitted_request_baseline
+  When permitted-request(Niels).
+//#violated !scenario_five_c_permitted_request_baseline.
 
 // Extend Niels's relation to include DataThroughTtp for this scenario.
 +relation-allows-archetype(Niels, VU, DataThroughTtp).
 
 submit-data-request(Niels, VU).
 
-?Holds(data-request(Niels, VU)).
-// Expected: true
+Invariant scenario_five_c_data_request_baseline
+  When data-request(Niels, VU).
+//#violated !scenario_five_c_data_request_baseline.
 
-?Holds(permitted-continuation(Niels, VU, DataThroughTtp)).
-// Expected: true
+Invariant scenario_five_c_continuation_baseline
+  When permitted-continuation(Niels, VU, DataThroughTtp).
+//#violated !scenario_five_c_continuation_baseline.
 
-?Holds(valid-compute-provider(Niels, VU, SURF)).
-// Expected: true
+Invariant scenario_five_c_valid_compute_provider_baseline
+  When valid-compute-provider(Niels, VU, SURF).
+//#violated !scenario_five_c_valid_compute_provider_baseline.
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -50,15 +56,17 @@ submit-data-request(Niels, VU).
 // ═══════════════════════════════════════════════════════════════════════════
 
 -steward-supports-compute-provider(VU, SURF).
+//#violated scenario_five_c_valid_compute_provider_baseline.
 
 // Archetype-level continuation still holds (archetype itself is still valid):
-?Holds(permitted-continuation(Niels, VU, DataThroughTtp)).
-// Expected: true — archetype itself is still valid
+Invariant scenario_five_c_continuation_after_provider_removal
+  When permitted-continuation(Niels, VU, DataThroughTtp).
+//#violated !scenario_five_c_continuation_after_provider_removal.
 
 // But the runtime's additional compute-provider check for DataThroughTtp fails:
-?Holds(valid-compute-provider(Niels, VU, SURF)).
-// Expected: false — no usable compute provider; runtime revokes the session
+Invariant scenario_five_c_invalid_compute_provider_after_removal
+  When Not(valid-compute-provider(Niels, VU, SURF)).
+//#violated !scenario_five_c_invalid_compute_provider_after_removal.
 
 // Restore.
 +steward-supports-compute-provider(VU, SURF).
--relation-allows-archetype(Niels, VU, DataThroughTtp).
