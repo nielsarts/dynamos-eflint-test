@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Scenario manifest: Niels at {VU, UVA} — approved.
+#
+# Paths are relative to dynamos-test-scenarios/ (the directory ABOVE this
+# manifests/ folder).
+# ─────────────────────────────────────────────────────────────────────────────
+id: scenario_01_approved
+description: "Niels at {VU, UVA} -> approved (H1)"
+suite: approval
+hypothesis: H1
+
+scenario_file: scenario_01_approved.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+agreement_files:
+  VU:  agreement_VU.eflint
+  UVA: agreement_UVA.eflint
+
+request:
+  user:
+    id: "1"
+    user_name: Niels
+  data_providers: [VU, UVA]
+  type: requestApproval
+
+# Optional. If omitted, the oracle auto-discovers candidates by scanning the
+# agreement files for +archetype(...) / +compute-provider(...) declarations.
+# Listed here for documentation.
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders
+  - auth_present_when_approved

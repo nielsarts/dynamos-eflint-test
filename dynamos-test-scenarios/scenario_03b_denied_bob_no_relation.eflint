@@ -15,10 +15,6 @@
 //                        scenario_03b_denied_bob_no_relation.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_VU.eflint".
-#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -26,22 +22,22 @@
 //
 // RequestApproval: { user: "Bob", dataProviders: ["VU", "UVA"] }
 
-+requester(Bob).
-+requested-steward(VU).
-+requested-steward(UVA).
++requester("Bob").
++requested-steward("VU").
++requested-steward("UVA").
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
 Invariant scenario_three_b_no_relation_vu
-  When Not(has-relation(Bob, VU)).
+  When Not(has-relation("Bob", "VU")).
 //#violated !scenario_three_b_no_relation_vu.
 
 Invariant scenario_three_b_no_relation_uva
-  When Not(has-relation(Bob, UVA)).
+  When Not(has-relation("Bob", "UVA")).
 //#violated !scenario_three_b_no_relation_uva.
 
 Invariant scenario_three_b_not_permitted_request
-  When Not(permitted-request(Bob)).
+  When Not(permitted-request("Bob")).
 //#violated !scenario_three_b_not_permitted_request.

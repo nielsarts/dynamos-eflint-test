@@ -1,0 +1,29 @@
+id: scenario_02b_approved_alice_partial
+description: "Alice at {VU, UVA} -> approved, VU invalid (H2b)"
+suite: approval
+hypothesis: H2b
+
+scenario_file: scenario_02b_approved_alice_partial.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+agreement_files:
+  VU:  agreement_VU.eflint
+  UVA: agreement_UVA.eflint
+
+request:
+  user:
+    id: "2"
+    user_name: Alice
+  data_providers: [VU, UVA]
+  type: requestApproval
+
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders
+  - auth_present_when_approved

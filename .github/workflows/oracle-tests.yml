@@ -1,0 +1,54 @@
+# Oracle-only test workflow.
+#
+# Runs the harness's self-consistency, oracle-projection, and regression
+# tests on every push. These tests need eflint-repl but do NOT need a live
+# DYNAMOS environment, so they can run in standard CI.
+#
+# A separate integration job (running the manifests' /validate path against
+# a real DYNAMOS) is intentionally NOT included here: it requires a full
+# DYNAMOS stack which is outside the scope of this repo's CI.
+name: oracle-tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  oracle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Haskell + cabal (for eflint-repl)
+        uses: haskell-actions/setup@v2
+        with:
+          ghc-version: "9.4"
+          cabal-version: "3.10"
+
+      - name: Install eflint-repl
+        run: |
+          cabal update
+          # Pin to the upstream Haskell implementation; adjust if a release tag
+          # / package name becomes available.
+          git clone https://gitlab.com/eflint/haskell-implementation.git eflint-impl
+          cd eflint-impl
+          cabal install --installdir="$HOME/.local/bin" --overwrite-policy=always exe:eflint-repl
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run oracle-only tests
+        env:
+          EFLINT_REPL_EXE: eflint-repl
+        run: |
+          PYTHONPATH=src pytest -m "not integration" -q tests/

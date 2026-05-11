@@ -1,0 +1,28 @@
+id: scenario_03b_denied_bob_no_relation
+description: "Bob at {VU, UVA} -> denied, no relation at either (H3b)"
+suite: approval
+hypothesis: H3b
+
+scenario_file: scenario_03b_denied_bob_no_relation.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+agreement_files:
+  VU:  agreement_VU.eflint
+  UVA: agreement_UVA.eflint
+
+request:
+  user:
+    id: "3"
+    user_name: Bob
+  data_providers: [VU, UVA]
+  type: requestApproval
+
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders

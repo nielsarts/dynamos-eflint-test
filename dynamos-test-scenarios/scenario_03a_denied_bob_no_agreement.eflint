@@ -13,8 +13,6 @@
 //                        scenario_03a_denied_bob_no_agreement.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -23,22 +21,22 @@
 // RequestApproval: { user: "Bob", dataProviders: ["SURF_org"] }
 // SURF_org has no agreement registered.
 
-+requester(Bob).
-+data-steward(SURF_org).
-+requested-steward(SURF_org).
++requester("Bob").
++data-steward("SURF_org").
++requested-steward("SURF_org").
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
 Invariant scenario_three_a_no_agreement
-  When Not(agreement(SURF_org)).
+  When Not(agreement("SURF_org")).
 //#violated !scenario_three_a_no_agreement.
 
 Invariant scenario_three_a_not_permitted_at_steward
-  When Not(permitted-at-steward(Bob, SURF_org)).
+  When Not(permitted-at-steward("Bob", "SURF_org")).
 //#violated !scenario_three_a_not_permitted_at_steward.
 
 Invariant scenario_three_a_not_permitted_request
-  When Not(permitted-request(Bob)).
+  When Not(permitted-request("Bob")).
 //#violated !scenario_three_a_not_permitted_request.

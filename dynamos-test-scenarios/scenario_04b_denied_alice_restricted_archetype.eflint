@@ -15,9 +15,6 @@
 //                        scenario_04b_denied_alice_restricted_archetype.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -26,25 +23,25 @@
 // RequestApproval: { user: "Alice", dataProviders: ["UVA"] }
 // Alice is permitted at UVA, but only for DataThroughTtp.
 
-+requester(Alice).
-+requested-steward(UVA).
++requester("Alice").
++requested-steward("UVA").
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Queries
 // ═══════════════════════════════════════════════════════════════════════════
 
 Invariant scenario_four_b_permitted_at_uva
-  When permitted-at-steward(Alice, UVA).
+  When permitted-at-steward("Alice", "UVA").
 //#violated !scenario_four_b_permitted_at_uva.
 
 Invariant scenario_four_b_not_compute_to_data
-  When Not(valid-archetype(Alice, UVA, ComputeToData)).
+  When Not(valid-archetype("Alice", "UVA", "ComputeToData")).
 //#violated !scenario_four_b_not_compute_to_data.
 
 Invariant scenario_four_b_not_reproducable_science
-  When Not(valid-archetype(Alice, UVA, ReproducableScience)).
+  When Not(valid-archetype("Alice", "UVA", "ReproducableScience")).
 //#violated !scenario_four_b_not_reproducable_science.
 
 Invariant scenario_four_b_data_through_ttp
-  When valid-archetype(Alice, UVA, DataThroughTtp).
+  When valid-archetype("Alice", "UVA", "DataThroughTtp").
 //#violated !scenario_four_b_data_through_ttp.

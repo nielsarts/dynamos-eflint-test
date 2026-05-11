@@ -1,0 +1,28 @@
+id: scenario_03a_denied_bob_no_agreement
+description: "Bob at {SURF_org} -> denied, no agreement (H3a)"
+suite: approval
+hypothesis: H3a
+
+scenario_file: scenario_03a_denied_bob_no_agreement.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+# No per-steward agreements are loaded — SURF_org is deliberately missing
+# from etcd to drive the "no agreement registered" path.
+agreement_files: {}
+
+request:
+  user:
+    id: "3"
+    user_name: Bob
+  data_providers: [SURF_org]
+  type: requestApproval
+
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders

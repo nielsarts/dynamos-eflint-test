@@ -14,9 +14,6 @@
 //                        scenario_05a_continuation_policy_change.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_VU.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BASELINE — Establish a session
@@ -24,21 +21,21 @@
 //
 // RequestApproval: { user: "Niels", dataProviders: ["VU"] }
 
-+requester(Niels).
-+requested-steward(VU).
++requester("Niels").
++requested-steward("VU").
 
 Invariant scenario_five_a_permitted_request_baseline
-  When permitted-request(Niels).
+  When permitted-request("Niels").
 //#violated !scenario_five_a_permitted_request_baseline.
 
-submit-data-request(Niels, VU).
+submit-data-request("Niels", "VU").
 
 Invariant scenario_five_a_data_request_baseline
-  When data-request(Niels, VU).
+  When data-request("Niels", "VU").
 //#violated !scenario_five_a_data_request_baseline.
 
 Invariant scenario_five_a_continuation_baseline
-  When permitted-continuation(Niels, VU, ComputeToData).
+  When permitted-continuation("Niels", "VU", "ComputeToData").
 //#violated !scenario_five_a_continuation_baseline.
 
 
@@ -46,28 +43,28 @@ Invariant scenario_five_a_continuation_baseline
 // Policy change: VU withdraws ComputeToData
 // ═══════════════════════════════════════════════════════════════════════════
 
--steward-supports-archetype(VU, ComputeToData).
+-steward-supports-archetype("VU", "ComputeToData").
 //#violated scenario_five_a_continuation_baseline.
 
 Invariant scenario_five_a_not_valid_archetype_after_withdrawal
-  When Not(valid-archetype(Niels, VU, ComputeToData)).
+  When Not(valid-archetype("Niels", "VU", "ComputeToData")).
 //#violated !scenario_five_a_not_valid_archetype_after_withdrawal.
 
 Invariant scenario_five_a_no_continuation_after_withdrawal
-  When Not(permitted-continuation(Niels, VU, ComputeToData)).
+  When Not(permitted-continuation("Niels", "VU", "ComputeToData")).
 //#violated !scenario_five_a_no_continuation_after_withdrawal.
 
 Invariant scenario_five_a_no_compute_to_data
-  When Not(valid-archetype(Niels, VU, ComputeToData)).
+  When Not(valid-archetype("Niels", "VU", "ComputeToData")).
 //#violated !scenario_five_a_no_compute_to_data.
 
 Invariant scenario_five_a_no_data_through_ttp
-  When Not(valid-archetype(Niels, VU, DataThroughTtp)).
+  When Not(valid-archetype("Niels", "VU", "DataThroughTtp")).
 //#violated !scenario_five_a_no_data_through_ttp.
 
 // Restore.
-+steward-supports-archetype(VU, ComputeToData).
++steward-supports-archetype("VU", "ComputeToData").
 
 Invariant scenario_five_a_continuation_restored
-  When permitted-continuation(Niels, VU, ComputeToData).
+  When permitted-continuation("Niels", "VU", "ComputeToData").
 //#violated !scenario_five_a_continuation_restored.

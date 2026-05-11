@@ -1,0 +1,28 @@
+id: scenario_04a_denied_alice_wrong_steward
+description: "Alice at {VU} -> denied (no relation at VU; H4a)"
+suite: approval
+hypothesis: H4a
+
+scenario_file: scenario_04a_denied_alice_wrong_steward.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+agreement_files:
+  VU:  agreement_VU.eflint
+  UVA: agreement_UVA.eflint
+
+request:
+  user:
+    id: "2"
+    user_name: Alice
+  data_providers: [VU]
+  type: requestApproval
+
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders

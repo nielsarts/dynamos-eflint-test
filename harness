@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Convenience wrapper so the harness CLI works without installing the package.
+#
+# Usage:
+#     ./harness list
+#     ./harness consistency scenario_01_approved
+#     ./harness run --no-sut scenario_01_approved
+#
+# Prefers a local .venv if present, falls back to system python3.
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -x "$ROOT/.venv/bin/python" ]]; then
+    PYTHON="$ROOT/.venv/bin/python"
+else
+    PYTHON="${PYTHON:-python3}"
+fi
+PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}" exec "$PYTHON" -m harness.cli "$@"

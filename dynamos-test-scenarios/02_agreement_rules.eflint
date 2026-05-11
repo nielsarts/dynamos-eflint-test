@@ -13,7 +13,6 @@
 //
 // Load order:  01_interface_policy  →  02_agreement_rules  →  scenario_*
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // (i)  Intermediate facts — agreement structure

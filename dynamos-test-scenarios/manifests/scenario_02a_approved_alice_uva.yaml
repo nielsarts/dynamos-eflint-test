@@ -1,0 +1,28 @@
+id: scenario_02a_approved_alice_uva
+description: "Alice at {UVA} -> approved (H2a, DataThroughTtp only)"
+suite: approval
+hypothesis: H2a
+
+scenario_file: scenario_02a_approved_alice_uva.eflint
+interface_file: 01_interface_policy.eflint
+shared_rules_file: 02_agreement_rules.eflint
+
+agreement_files:
+  UVA: agreement_UVA.eflint
+
+request:
+  user:
+    id: "2"
+    user_name: Alice
+  data_providers: [UVA]
+  type: requestApproval
+
+candidates:
+  archetypes:        [ComputeToData, DataThroughTtp, ReproducableScience]
+  compute_providers: [SURF]
+
+assertions:
+  - request_approved
+  - valid_dataproviders
+  - invalid_dataproviders
+  - auth_present_when_approved

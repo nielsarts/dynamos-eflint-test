@@ -15,10 +15,6 @@
 //                        scenario_02b_approved_alice_partial.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_VU.eflint".
-#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -26,9 +22,9 @@
 //
 // RequestApproval: { user: "Alice", dataProviders: ["VU", "UVA"] }
 
-+requester(Alice).
-+requested-steward(VU).
-+requested-steward(UVA).
++requester("Alice").
++requested-steward("VU").
++requested-steward("UVA").
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Queries
@@ -36,50 +32,50 @@
 
 // Overall: at least one steward (UVA) has a relation, so admissible.
 Invariant scenario_two_b_permitted_request
-  When permitted-request(Alice).
+  When permitted-request("Alice").
 //#violated !scenario_two_b_permitted_request.
 
 // Per-steward breakdown:
 Invariant scenario_two_b_vu_not_permitted
-  When Not(permitted-at-steward(Alice, VU)).
+  When Not(permitted-at-steward("Alice", "VU")).
 //#violated !scenario_two_b_vu_not_permitted.
 
 Invariant scenario_two_b_uva_permitted
-  When permitted-at-steward(Alice, UVA).
+  When permitted-at-steward("Alice", "UVA").
 //#violated !scenario_two_b_uva_permitted.
 
 // VU yields nothing:
 Invariant scenario_two_b_vu_not_compute_to_data
-  When Not(valid-archetype(Alice, VU, ComputeToData)).
+  When Not(valid-archetype("Alice", "VU", "ComputeToData")).
 //#violated !scenario_two_b_vu_not_compute_to_data.
 
 Invariant scenario_two_b_vu_not_data_through_ttp
-  When Not(valid-archetype(Alice, VU, DataThroughTtp)).
+  When Not(valid-archetype("Alice", "VU", "DataThroughTtp")).
 //#violated !scenario_two_b_vu_not_data_through_ttp.
 
 Invariant scenario_two_b_vu_not_reproducable_science
-  When Not(valid-archetype(Alice, VU, ReproducableScience)).
+  When Not(valid-archetype("Alice", "VU", "ReproducableScience")).
 //#violated !scenario_two_b_vu_not_reproducable_science.
 
 // UVA yields DataThroughTtp:
 Invariant scenario_two_b_uva_data_through_ttp
-  When valid-archetype(Alice, UVA, DataThroughTtp).
+  When valid-archetype("Alice", "UVA", "DataThroughTtp").
 //#violated !scenario_two_b_uva_data_through_ttp.
 
 Invariant scenario_two_b_uva_not_compute_to_data
-  When Not(valid-archetype(Alice, UVA, ComputeToData)).
+  When Not(valid-archetype("Alice", "UVA", "ComputeToData")).
 //#violated !scenario_two_b_uva_not_compute_to_data.
 
 Invariant scenario_two_b_uva_not_reproducable_science
-  When Not(valid-archetype(Alice, UVA, ReproducableScience)).
+  When Not(valid-archetype("Alice", "UVA", "ReproducableScience")).
 //#violated !scenario_two_b_uva_not_reproducable_science.
 
 // Act is not permitted for VU (no relation):
-submit-data-request(Alice, VU).
+submit-data-request("Alice", "VU").
 //#violated submit-data-request(*, *).
 
-submit-data-request(Alice, UVA).
+submit-data-request("Alice", "UVA").
 
 Invariant scenario_two_b_uva_data_request
-  When data-request(Alice, UVA).
+  When data-request("Alice", "UVA").
 //#violated !scenario_two_b_uva_data_request.

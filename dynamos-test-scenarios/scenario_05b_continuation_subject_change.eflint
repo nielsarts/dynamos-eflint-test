@@ -13,9 +13,6 @@
 //                        scenario_05b_continuation_subject_change.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_VU.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BASELINE — Establish a session
@@ -23,21 +20,21 @@
 //
 // RequestApproval: { user: "Niels", dataProviders: ["VU"] }
 
-+requester(Niels).
-+requested-steward(VU).
++requester("Niels").
++requested-steward("VU").
 
 Invariant scenario_five_b_permitted_request_baseline
-  When permitted-request(Niels).
+  When permitted-request("Niels").
 //#violated !scenario_five_b_permitted_request_baseline.
 
-submit-data-request(Niels, VU).
+submit-data-request("Niels", "VU").
 
 Invariant scenario_five_b_data_request_baseline
-  When data-request(Niels, VU).
+  When data-request("Niels", "VU").
 //#violated !scenario_five_b_data_request_baseline.
 
 Invariant scenario_five_b_continuation_baseline
-  When permitted-continuation(Niels, VU, ComputeToData).
+  When permitted-continuation("Niels", "VU", "ComputeToData").
 //#violated !scenario_five_b_continuation_baseline.
 
 
@@ -45,26 +42,26 @@ Invariant scenario_five_b_continuation_baseline
 // Subject attribute change: Niels loses his relation at VU
 // ═══════════════════════════════════════════════════════════════════════════
 
--has-relation(Niels, VU).
+-has-relation("Niels", "VU").
 //#violated scenario_five_b_permitted_request_baseline.
 //#violated scenario_five_b_continuation_baseline.
 
 Invariant scenario_five_b_not_permitted_at_vu
-  When Not(permitted-at-steward(Niels, VU)).
+  When Not(permitted-at-steward("Niels", "VU")).
 //#violated !scenario_five_b_not_permitted_at_vu.
 
 Invariant scenario_five_b_no_continuation_after_relation_loss
-  When Not(permitted-continuation(Niels, VU, ComputeToData)).
+  When Not(permitted-continuation("Niels", "VU", "ComputeToData")).
 //#violated !scenario_five_b_no_continuation_after_relation_loss.
 
 // Restore.
-+has-relation(Niels, VU).
-+relation-allows-request-type(Niels, VU, SqlDataRequest).
-+relation-allows-dataset(Niels, VU, WageGap).
-+relation-allows-archetype(Niels, VU, ComputeToData).
-+relation-allows-compute-provider(Niels, VU, SURF).
++has-relation("Niels", "VU").
++relation-allows-request-type("Niels", "VU", "SqlDataRequest").
++relation-allows-dataset("Niels", "VU", "WageGap").
++relation-allows-archetype("Niels", "VU", "ComputeToData").
++relation-allows-compute-provider("Niels", "VU", "SURF").
 //#violated scenario_five_b_not_permitted_at_vu.
 
 Invariant scenario_five_b_continuation_restored
-  When permitted-continuation(Niels, VU, ComputeToData).
+  When permitted-continuation("Niels", "VU", "ComputeToData").
 //#violated !scenario_five_b_continuation_restored.

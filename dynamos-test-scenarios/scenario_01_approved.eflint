@@ -11,10 +11,6 @@
 //                      scenario_01_approved.eflint \
 //       ; cat ) | eflint-repl
 // ─────────────────────────────────────────────────────────────────────────────
-#require "01_interface_policy.eflint".
-#require "02_agreement_rules.eflint".
-#require "agreement_VU.eflint".
-#require "agreement_UVA.eflint".
 
 // ═══════════════════════════════════════════════════════════════════════════
 // Request facts
@@ -22,9 +18,9 @@
 //
 // RequestApproval: { user: "Niels", dataProviders: ["VU", "UVA"] }
 
-+requester(Niels).
-+requested-steward(VU).
-+requested-steward(UVA).
++requester("Niels").
++requested-steward("VU").
++requested-steward("UVA").
 
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -33,69 +29,69 @@
 
 // Overall admissibility.
 Invariant scenario_one_permitted_request
-  When permitted-request(Niels).
+  When permitted-request("Niels").
 //#violated !scenario_one_permitted_request.
 
 // Per-steward.
 Invariant scenario_one_permitted_at_vu
-  When permitted-at-steward(Niels, VU).
+  When permitted-at-steward("Niels", "VU").
 //#violated !scenario_one_permitted_at_vu.
 
 Invariant scenario_one_permitted_at_uva
-  When permitted-at-steward(Niels, UVA).
+  When permitted-at-steward("Niels", "UVA").
 //#violated !scenario_one_permitted_at_uva.
 
 // Discovery: valid archetypes per steward.
 Invariant scenario_one_vu_compute_to_data
-  When valid-archetype(Niels, VU, ComputeToData).
+  When valid-archetype("Niels", "VU", "ComputeToData").
 //#violated !scenario_one_vu_compute_to_data.
 
 Invariant scenario_one_vu_not_data_through_ttp
-  When Not(valid-archetype(Niels, VU, DataThroughTtp)).
+  When Not(valid-archetype("Niels", "VU", "DataThroughTtp")).
 //#violated !scenario_one_vu_not_data_through_ttp.
 
 Invariant scenario_one_vu_not_reproducable_science
-  When Not(valid-archetype(Niels, VU, ReproducableScience)).
+  When Not(valid-archetype("Niels", "VU", "ReproducableScience")).
 //#violated !scenario_one_vu_not_reproducable_science.
 
 Invariant scenario_one_uva_compute_to_data
-  When valid-archetype(Niels, UVA, ComputeToData).
+  When valid-archetype("Niels", "UVA", "ComputeToData").
 //#violated !scenario_one_uva_compute_to_data.
 
 Invariant scenario_one_uva_data_through_ttp
-  When valid-archetype(Niels, UVA, DataThroughTtp).
+  When valid-archetype("Niels", "UVA", "DataThroughTtp").
 //#violated !scenario_one_uva_data_through_ttp.
 
 Invariant scenario_one_uva_not_reproducable_science
-  When Not(valid-archetype(Niels, UVA, ReproducableScience)).
+  When Not(valid-archetype("Niels", "UVA", "ReproducableScience")).
 //#violated !scenario_one_uva_not_reproducable_science.
 
 // Discovery: valid compute providers per steward.
 Invariant scenario_one_vu_surf
-  When valid-compute-provider(Niels, VU, SURF).
+  When valid-compute-provider("Niels", "VU", "SURF").
 //#violated !scenario_one_vu_surf.
 
 Invariant scenario_one_uva_surf
-  When valid-compute-provider(Niels, UVA, SURF).
+  When valid-compute-provider("Niels", "UVA", "SURF").
 //#violated !scenario_one_uva_surf.
 
 // Submit.
-submit-data-request(Niels, VU).
-submit-data-request(Niels, UVA).
+submit-data-request("Niels", "VU").
+submit-data-request("Niels", "UVA").
 
 Invariant scenario_one_data_request_vu
-  When data-request(Niels, VU).
+  When data-request("Niels", "VU").
 //#violated !scenario_one_data_request_vu.
 
 Invariant scenario_one_data_request_uva
-  When data-request(Niels, UVA).
+  When data-request("Niels", "UVA").
 //#violated !scenario_one_data_request_uva.
 
 // Sessions established — verify continuation.
 Invariant scenario_one_continuation_vu
-  When permitted-continuation(Niels, VU, ComputeToData).
+  When permitted-continuation("Niels", "VU", "ComputeToData").
 //#violated !scenario_one_continuation_vu.
 
 Invariant scenario_one_continuation_uva
-  When permitted-continuation(Niels, UVA, ComputeToData).
+  When permitted-continuation("Niels", "UVA", "ComputeToData").
 //#violated !scenario_one_continuation_uva.
