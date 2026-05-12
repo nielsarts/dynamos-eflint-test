@@ -23,6 +23,7 @@ import subprocess
 import string
 import sys
 import threading
+import time
 from io import TextIOWrapper
 from typing import Generator, List, Optional, Self, Set
 
@@ -1594,6 +1595,7 @@ class Reasoner:
         self.handled_violations = set()
         self.checked_ever = False
         self.reports = reports
+        self.total_sut_time: float = 0.0
 
         # Set the random fact
         self._trigger_fact = f"unit-tester-{''.join(random.choices(string.ascii_lowercase, k=16))}"
@@ -1630,6 +1632,7 @@ class Reasoner:
 
         # Collect results until the prompt appears for new input
         chunk = ""
+        _sut_start = time.perf_counter()
         while True:
             # Read a line
             line = self._h.stdout.readline().decode("utf-8")
@@ -1652,6 +1655,9 @@ class Reasoner:
 
             # Otherwise, it's any effect line
             chunk += line
+        _sut_elapsed = time.perf_counter() - _sut_start
+        self.total_sut_time += _sut_elapsed
+        self.reports.append(Debug(f" > SUT response time for phrase: {_sut_elapsed * 1000:.1f} ms"))
 
         # Now parse the effect lines
         for line in chunk.splitlines():
@@ -1857,6 +1863,9 @@ class UnitTest(threading.Thread):
                     if not effect in reasoner.handled_violations:
                         self.output.append(Warn(f"Violation '{effect}' occurred which has not been asserted to (not) occur"))
                         reasoner.handled_violations.add(effect)
+
+            # Log total time spent waiting for SUT responses
+            self.output.append(Info(f"Total SUT response time: {reasoner.total_sut_time * 1000:.1f} ms"))
 
             # Done!
             return

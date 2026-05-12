@@ -14,7 +14,7 @@ Configuration:
 - ``EFLINT_REPL_EXE``           path to eflint-repl (default: "eflint-repl")
 - ``EFLINT_TEST_PY``            path to eflint-test.py (default: <root>/eflint-test.py)
 - ``DYNAMOS_ETCD_URL``          base URL for etcd (default: http://localhost:30005)
-- ``DYNAMOS_POLICY_ENFORCER_URL`` base URL for the SUT (default: http://localhost:8082)
+- ``DYNAMOS_POLICY_ENFORCER_URL`` base URL for the SUT (default: http://policy-enforcer.orchestrator.svc.cluster.local)
 """
 from __future__ import annotations
 

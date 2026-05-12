@@ -19,7 +19,7 @@ import httpx
 from harness.manifest import Manifest
 
 
-DEFAULT_BASE_URL = "http://localhost:8082"
+DEFAULT_BASE_URL = "http://policy-enforcer.orchestrator.svc.cluster.local"
 VALIDATE_PATH = "/api/v1/policy-enforcer/validate"
 HEALTH_PATH = "/api/v1/health"
 

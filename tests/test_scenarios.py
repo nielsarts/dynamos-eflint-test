@@ -70,7 +70,6 @@ def test_scenario_is_self_consistent(manifest: Manifest) -> None:
 
 
 # Hand-derived from the hypothesis table in
-# evaluation_correctness_request_approval_a1b2c3d4.plan.md.
 HYPOTHESIS_TABLE: dict[str, dict[str, object]] = {
     "scenario_01_approved": {
         "request_approved": True,
@@ -167,7 +166,7 @@ def test_regression_in_agreement_flips_oracle(tmp_path: Path) -> None:
 
     uva = work / "agreement_UVA.eflint"
     text = uva.read_text()
-    target = "+relation-allows-archetype(Niels, UVA, DataThroughTtp)."
+    target = "+relation-allows-archetype(\"Niels\", \"UVA\", \"DataThroughTtp\")."
     assert target in text, "test fixture must contain the line we mutate"
     uva.write_text(text.replace(target, f"// REGRESSED: {target}"))
 
